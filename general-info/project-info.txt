@@ -1,0 +1,43 @@
+PROJECT DEADLINES/GENERAL INFO ---------------------------------------------------------------------
+
+App due: Friday March 31, 11:59pm
+Documentation due: Sunday April 2nd, 11:59pm
+Presentations (6 min presentation with 2 min for questions): Week of April 3rd
+
+GRADING ---------------------------------------------------------------------
+App: 75%, Documentation 20%, Presentation 5% - all group members required to present 
+
+OVERVIEW ---------------------------------------------------------------------
+Pothole on your street?  Missed trash pick-up?   Loud party next door?  Call 3-1-1. 
+The city of Cincinnati has put together a data portal where you can access a variety of data about the city (all data here: https://data.cincinnati-oh.gov/Links to an external site.).  We are going to create an interactive visualization to help people understand 311 (Non-emergency) calls in 2022.  Where do most of these calls request service?  Are there periods of time where more requests come in?  What are the most common kinds of requests?  How long does it take for the city to respond and close the requests?  The city has a visualization of this some of this data.  I think we can do better! 
+
+DATA ---------------------------------------------------------------------
+Access the complete dataset (all years) here:  https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-311-Non-Emergency-Service-Requests/4cjh-bm8bLinks to an external site.
+
+Access a processed version of the dataset in tab-separated format which I believe contains 2022 data: Cincy311_2022_final.tsv Download Cincy311_2022_final.tsv 
+
+I opted for tab-separated as opposed to comma separated, because there are commas in the entries.  You can choose the format and approach that works for you. 
+
+How did I generate this file?  Side-note: Unix command line and data processing
+
+Note- As always, data is never perfect. This project may involve data cleaning and pre-processing to go from the data that has been entered into the database to a version of the data suitable for your visualization project. You can use your favorite language or tool (including Excel) to load and manipulate the data, saving a new file that you then can load into your javascript visualization application. 
+
+Data fields
+Learn more about them here: https://data.cincinnati-oh.gov/Thriving-Neighborhoods/Cincinnati-311-Non-Emergency-Service-Requests/4cjh-bm8b
+
+Some of note: 
+
+Status: NEW, OPEN or CLOS (closed).   Note- this field is often in error.  If it is listed as closed, it is likely closed.  If it is listed as New or Open, it may be complete but someone failed to list it as closed. 
+
+Service Name and Service Code, I believe are consistent, so can be used as identifiers throughout the dataset
+
+Description is sometimes included, and contains more details about the request.
+
+There is date information- request, updated, expected.  Requested - the date the request goes into the system.  Updated- the date someone notes that the issues is resolved.  Note- sometimes they fail to make note of a resolution date. 
+
+Latitude and Longitude- give us an address
+
+Zip-code may allow you to produce summaries of big areas in the city Cincinnati zip code map: https://www.zipdatamaps.com/zipcodes-cincinnati-ohLinks to an external site.
+
+Data size
+In 2022, there were around 110,000 calls.  I have tested loading these into d3 and displaying them on a map, so it should be appropriate for the project.  If you encounter challenges, tell me ASAP and we will develop a data reduction strategy. 

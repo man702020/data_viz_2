@@ -1,0 +1,100 @@
+(* = not yet done)
+
+D-GOALS ---------------------------------------------------------------------
+
+*Create an interactive visualization application using d3.  It should run under localhost, but you can optionally serve it publicly through github pages or another hosting service. 
+*Use git to save your code, and coordinate coding work within your team. 
+*Your visualizations should be displayed in a coherent layout. 
+    You can either use a fixed grid layout, with elements positioned in consistent locations in a fixed sized window, 
+    or a responsive layout, which accommodates diverse window sizes including mobile devices.  Explain your design choice.  
+*Try to make your page look professional, with appropriate labels, fonts, font sizes, colors, layouts.  The goal is to have a visualization someone can use and understand.  
+*This time, your project will have design goals that you should address through sketches prior to implementation.  
+    You aren't expected to be artists or graphic designers in creating these sketches, but the sketches serve as tools to help you envision your final product before you code.  
+    These sketches should be included in your documentation, and will be turned in at mid-project checkpoints. 
+*Provide a set of sketches to illustrate the layout of elements on screen- including user interface controls and visualization elements.  
+*Create a sketch of each visualization you create, with titles, labels, legends, indicate use of color, and a general sketch of the data.  
+*For brushing and linking interactions in the B-goals, or interactions for the novel views created for the A-goals, 
+    show a cartoon illustrating how the interactions will be invoked, how the visualizations will respond.  
+
+
+C-GOALS ---------------------------------------------------------------------
+
+*The first set of goals are to show the 311 calls dataset on a map, with an additional timeline view, with some interactivity. 
+
+*MAP: Show the locations of 311 calls (columns labeled latitude and longitude) on a zoomable interactive map, using Leaflet and d3.  
+    This will allow the user to see the spatial distribution of calls, zoom in and see details of the site, and relate this spatial positioning to other data fields.  
+*Default zoom and positioning: When we open your application, I suggest setting an initial zoom level and center position for the map, so the user immediately sees the data without needing to pan and zoom.   
+*Encoding: Show each call as a colored point on the map (color scheme options below), positioned by latitude and longitude.  
+    I have tested displaying these points, and have not had performance lags, so this should be achievable. Let me know ASAP of performance issues. 
+*Details on demand:  When hovering over a point, provide details-on-demand about the call.  This should include the date of the call, the updated date, the public agency handling the call, the type of call and descriptive information.  
+    *Note- some entries may not have GPS coordinates.  Don't eliminate these items altogether, because they are part of the dataset and should be featured in the other charts.  
+        You could indicate somewhere within the visualization how many calls are not mapped. 
+*Provide a set of 'color by' options for the points on the map, which the user can activate through user interface elements:
+    *color by call type (service code or service name)
+        Note- you may need to group these categories together to avoid using too many categorical colors
+    *color by time between the requested date and the updated date 
+    *color to indicate how far into the year the call was placed
+    *color by public agency responding to the calls 
+*design explanation for documentation:  describe the colors you selected for these options and why you selected them, referencing whether the data is nominal, ordinal, quantitative, etc. and whether the color scheme is monochromatic, diverging, or categorical.  
+*Add a button that allows the user to toggle between different map background- such as from aerial images to one that shows roads/boundaries/etc.   
+    Find backgrounds here: https://leaflet-extras.github.io/leaflet-providers/preview/
+*TIMELINE: The page should include a timeline of when calls were placed over the complete timeframe.  This view of the data should allow someone to see when in the year most calls were placed. 
+*The timeline view should be clearly labeled, with axes that make it easy to interpret the data
+*The timeline view should be long enough to allow someone to see trends over time and variations in number of calls. 
+*You can bin into appropriate sized timeframes.  You can bin into an appropriate size interval- I would suggest daily or weekly, to give enough granularity in the timeline. 
+*Design choices:  Choose how you want to represent the data in this timeline.  Do you want to show a line chart, a bar chart, a heat-map, a plot of individual samples by time?  Draw a sketch of your intended visualization and explain your design choices. 
+*Choose how to use color for your timeline.  Are you using a neutral, desaturated color or a color scale?  Why did you make this choice?  
+*Details on demand: When hovering over the timeline, provide a tooltip to give the user more information about the timeframe they are hovering over.  For instance, if plotting the data by week, show the selected week and the number of calls.
+
+
+B-goals ---------------------------------------------------------------------
+
+*New views to introduce:
+    *A visualization that shows the day of the week when most calls are placed  
+    *A visualization that shows the number of calls in different major categories- service code or service name.  You may want to group some of these codes together, as you did in the  
+    *A visualization showing amount of time between when the request is received and when it is updated
+    *A visualization showing the number of calls by zipcode.  Link out to a map of the zipcodes, or include a small graphic showing the locations of the zip codes.
+    *Brushing and linking interactions
+*Add a brush to the timeline view.  The user should be able to drag the brush to select different time windows, and the user should be able to resize the brush to show long and short timespans.  
+*Allow the user to select and deselect bars in the bar charts. 
+*When the user makes these selections, the other plots should either update, including the map, filtering out the calls not included in the brushed areas in the other views, 
+    or show the selection relative to the original data in some form- such as overlaid on the same chart.  This design choice is up to you.  Explain your choice.  
+*The user needs a way to de-select or remove the brush, to go back to seeing the original data.   
+The goal is to allow the user to probe the data through interaction, and see how the distribution changes as new selections are made. 
+
+
+A-GOALS ---------------------------------------------------------------------
+
+*Add the ability to brush the map, to select points within a region on the map.  This may not work with the default d3 brush and you may have to create a custom interaction- creating a custom selection rect, or capturing mouse over interactions while also holding a control key, to handle brushing data points in the map.  
+*Create a set of design sketches for your approach.
+*Describe how you realized this design in your implementation.  
+*Choose one of the following additional visualizations: 
+    1) A visualization designed by your team showing the unstructured text data about the call and request.  This data is not available for all calls in the dataset, but if present, we want some representation of this unstructured text data, that gives the user an impression of the requests overall. 
+        As with the other charts, this should update when the user makes brushing selections
+        Sketch your approach, including encodings and interactions, and submit these sketches with your documentation. 
+    2) Add the ability for the user to switch from the map view showing all the calls, to a view showing a heat-map representation, which displays the number of calls in each cell in a grid you create over the city.  
+        The heat map grid cells should size appropriately, as the user pans and zooms
+        Include tooltip interactions to show information about the calls in that grid cell 
+        Brushing and linking interactions in other visualizations should update your heatmap 
+    3) Create a visualization which accomplishes an analysis task you are interested in exploring.  This visualization must be something other than a bar chart, line chart, pie chart or scatterplot.   
+        Clearly define the goals of this visualization- what do you want someone to learn from it?
+        Describe any data transformation you performed
+        Describe how you arrived at the selected visual encoding and interaction design.  Include sketchs
+        This visualization should be interactive and should tie-in with the interactions already created in your application (brushing and linking).  
+
+
+DOCUMENTATION ---------------------------------------------------------------------
+
+For documentation: assume that someone is encountering your project for the first time. 
+
+This documentation must be publicly available on each team members personal webpage.  The content for each team member can be identical, but it is important for each student to have a record of the project.  
+
+Explain the motivation for your application.  What can it allow someone to understand? 
+
+1 section on the data: Describe the data and include a link. 
+1 section on the visualization components: Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions. 
+This time, include a section with your design sketches and design justifications.
+1 section on what your application enables you to discover: Present some findings you arrive at with your application. 
+1 section on your process- what libraries did you use?  How did you structure your code?  How can you access it and run it?  Link to your code (and the live application, if it is deployed online). 
+Include a 2-3 minute demo video, showing your application in action.  The easiest way to record this is with a screen capture tool, which also captures audio- such as Quicktime.  Use a voiceover or video captions to explain your application.  Demo videos should be sufficient on their own, but can reference your documentation.  Include the name of the project, your name, the project components, and how your application works.  You can present it on your webpage or on youtube, but linked on your webpage. 
+This time, document who on your team did which component of the project.  Ex.  If someone worked on the data, and on bar charts, list their effort on these components. 

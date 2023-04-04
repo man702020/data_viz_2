@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>CS6024 - Project 2</title>
+        <!-- Bootstrap Stylesheet -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+            crossorigin="anonymous"
+        >
+        <link rel="stylesheet" href="css/style.css">
+
+        <!-- D3 bundle -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"
+            integrity="sha512-cd6CHE+XWDQ33ElJqsi0MdNte3S+bQY819f7p3NUHgwQQLXSKjE4cPZTeGNI+vaxZynk1wVU3hoHmow3m089wA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <!-- Leaflet stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+            integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+            crossorigin=""
+        />
+        <!-- Leaflet code -->
+        <script
+            src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+            crossorigin=""
+        ></script>
+    </head>
+    <body class="vh-100 d-flex flex-column">
+        <nav class="navbar bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <span class="navbar-branch mb-0 h1">3-1-1 Calls in Cincinnati - Data Visualization</span>
+                <div class="flex-grow-1"></div>
+                <div class="text-end">
+                    <small class="text-white d-block">D3's Get Degrees</small>
+                    <small class="text-white d-block">CS6024 - Spring 2023</small>
+                </div>
+            </div>
+        </nav>
+        <main class="container-fluid flex-grow-1">
+            <div class="row h-100">
+                <section class="col-4" id="side-panel">
+                 <!-- A and B goals here -->
+                 
+                 <div id="dow-trend-container" ></div>
+                 <div id="category-trend-container"></div>
+                 <div>
+                      <button onclick="location.href='timePie.html'" type="button">Call Update Times</button>
+                  </div>
+
+                   
+
+
+                </section>
+                <div class="col-8">
+                    <div class="row row-cols-1 h-100">
+                        <section class="col position-relative">
+                            <div id="map-container"></div>
+                            <div id="toggle-panel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h1 class="card-title h6">
+                                            Select Map Tileset
+                                        </h1>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="map-base-layer-switch" id="map-base-layer-switch-esri"/>
+                                            <label class="form-check-label" for="map-base-layer-switch-esri">Satallite</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="map-base-layer-switch" id="map-base-layer-switch-topo"/>
+                                            <label class="form-check-label" for="map-base-layer-switch-topo">Intense Roads</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="map-base-layer-switch" id="map-base-layer-switch-stamen-terrain" checked/>
+                                            <label class="form-check-label" for="map-base-layer-switch-stamen-terrain">Cool Roads</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="brush-panel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="map-brush-switch" id="map-brush-switch-off" checked/>
+                                            <label class="form-check-label" for="map-brush-switch-off">Navigate Mode</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="map-brush-switch" id="map-brush-switch-on"/>
+                                            <label class="form-check-label" for="map-brush-switch-on">Brush Mode</label>
+                                        </div>
+                                        <button id="map-brush-clear" class="btn btn-sm btn-secondary">Clear Brush</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="col">
+                            <div id="input-timeline">
+                              <div class="inputs-column">
+                                <div class="form-group">
+                                  <label for="Month">Input Bin Start Date for the month:</label>
+                                  <input type="number" id="Month" name="Month" placeholder="Start Day for Month" max="30" onchange="resetTimelineMonth(this.value)">
+                                </div>
+                                <div class="form-group">
+                                  <label for="Week">Input Bin Start Date for the Week:</label>
+                                  <input type="number" id="Week" name="Week" placeholder="Start Day for Week" max="6" onchange="resetTimelineWeek(this.value)">
+                                </div>
+                              </div>
+                              <div class="buttons-column">
+                                <button id="reset-button" class="btn btn-sm btn-outline-secondary" type="button">Reset Filters</button>
+                                <button id="week-button"  class="btn btn-sm btn-outline-secondary" type="button">Show Weeks</button>
+                                <button id="month-button" class="btn btn-sm btn-outline-secondary" type="button">Show Days</button>
+                              </div>
+                            </div>
+                            <div id="timeline-container" class="h-100"></div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <div id="tooltip"></div>
+        <div id="loader">
+            <div class="spinner-border" role="status">
+                <!-- <span class="sr-only">Loading Visualizations...</span> -->
+            </div>
+        </div>
+
+        <!-- Our JS code -->
+        <script src="js/utils.js"></script>
+
+        <!-- Carryover from Project 1 -->
+        <script src="js/AbstractChart.js"></script>
+        <script src="js/Table.js"></script>
+        <script src="js/BarChart.js"></script>
+        <script src="js/Histogram.js"></script>
+        <script src="js/LineChart.js"></script>
+        <script src="js/ScatterPlot.js"></script>
+        <script src="js/StackedBarChart.js"></script>
+        <script src="js/PieChart.js"></script>
+
+        <!-- New with Project 2 -->
+        <script src="js/LeafletMap.js"></script>
+        <script src="js/index.js"></script>
+        <script src="js/OldBarChart.js"></script>
+        <script src="js/TimePie.js"></script>
+
+    </body>
+</html>

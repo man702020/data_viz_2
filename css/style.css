@@ -1,0 +1,122 @@
+#loader {
+    position: absolute;
+    display: flex;
+
+    width: 100vw;
+    height: 100vh;
+
+    justify-content: center;
+    align-items: center;
+}
+
+#map-container {
+    width: 100%;
+    height: 60vh;
+}
+#toggle-panel {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    z-index: 900;
+}
+#brush-panel {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+
+    z-index: 900;
+}
+
+#timeline-container {
+    max-height: 30vh;
+    max-width: 100%;
+}
+#timeline-container svg {
+    max-width: 100%;
+}
+
+#tooltip {
+    position: absolute;
+    visibility: hidden;
+    background: #fff;
+    box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
+    border: 1px solid #ddd;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 2px 8px;
+}
+
+.tooltip-label {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+
+.slidecontainer {
+    width: 300px; /* Width of the outside container */
+  }
+  
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;  
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%; 
+    background: #04AA6D;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #04AA6D;
+    cursor: pointer;
+  }
+  
+#input-timeline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputs-column {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1em;
+
+}
+
+.form-group {
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.buttons-column {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  font-weight: 600;
+  
+}
+.buttons-column button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

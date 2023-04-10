@@ -28,7 +28,7 @@ d3.tsv('data/Cincy311_2022_final.tsv')
         console.log(`Data loading complete: ${rawData.length} records.`);
         // const data = rawData.slice(0, 10000).map(parseRecord);
         const data = rawData.map(parseRecord)
-            .filter((d, i) => i % 2 === 0 && d.REQUESTED_DATE?.getFullYear() === 2022);
+            .filter((d, i) => i % 4 === 0 && d.REQUESTED_DATE?.getFullYear() === 2022);
         console.log(`Down to ${data.length} filtered records.`);
         console.log("Example:", data[0]);
         return visualizeData(data);
@@ -181,42 +181,25 @@ function visualizeData(data: CallData[]) {
 
     // B Goal Charts
     // Day of Week popularity bar chart
-    //TODO: Put manual sorting order, chart is sorted alphabetically
-    function sortCount(a: any, b:any) {
-        const days = {
-            "Sunday": 1,
-            "Monday": 2,
-            "Tuesday": 3,
-            "Wednesday": 4,
-            "Thursday": 5,
-            "Friday": 6,
-            "Saturday": 7
-        }
-        //console.log(days["Sunday"],days[a]) //1
-        //console.log(a,b)
-        return days[a] < days[b] ? -1 : (days[a] > days[b] ? 1 : 0); // I know it is screaming errors but it works for now
-    }
+
     const categories = []; // list of grouped categories to prevent massive overfilling
     const dowBarChart = new BarChart(
         data,
-        // the mapper tells the chart what data from the source `data` you actually want to plot 
+        // the mapper tells the chart what data from the source `data` you actually want to plot
         // `aggregateMapper` is a way to group the data points into bins for a bar chart
         aggregateMapper(  //TODO: Need to sort by weekday as well. originally returns week day as number
-            (d) => ((d.REQUESTED_DATE || new Date()).toLocaleString('en-us', {  weekday: 'long' })), // or whatever you want to group it by
+            (d) => ((d.REQUESTED_DATE || new Date()).toLocaleString('en-us', {  weekday: 'short' })), // or whatever you want to group it by
             (b, count) => ({ label: b, value: count,
-            tooltip: "Calls: " + count.toString(), // TODO: Adjust to actual value for some reason gives error when tooltip shows 
+            tooltip: "Calls: " + count.toString(), // TODO: Adjust to actual value for some reason gives error when tooltip shows
             color: "#66aa77" })
         ),
         {// optional stuff to configure the bar chart, like axis labels
             xAxisLabel: "Day",
             yAxisLabel: "Calls",
-            labelOrder: ["Sunday","Monday", "Tueday", "Wednesday", "Thursday", "Friday"],
-            labelSort: sortCount
-
-
-        }, 
+            labelOrder: ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        },
         {
-            parent: "#dow-trend-container", 
+            parent: "#dow-trend-container",
             className: "h-100",
             width: 300,
             height: 100,
@@ -228,13 +211,13 @@ function visualizeData(data: CallData[]) {
         (group) => group.length, // grab count of group
         (label) => label.SERVICE_NAME, // what to group them by
       );
-    // filter the wierd ones with (<=25) 
+    // filter the wierd ones with (<=25)
     let all_categories: Array<{ Category: string | undefined, Count: number }>
     let categoryNames: Array<string>
     all_categories = [];
     categoryNames = [];
-    const countCutoff = 25;
-    const subCategories = ["Building", "Tree","Rats","Weeds","Trash","Sign","Sewage"]
+    const countCutoff = 50;
+    const subCategories = ["Building", "Tree","Rats","Weeds","Trash","Trash cart", "Sign","Sewage", "Vehicle", "Tall grass/weeds", "Yard Waste", "Recycling"]
 
     myCategories.forEach(d => { // get main big categoris
         let categoryData =  {Category: d[0], Count: d[1]}
@@ -252,7 +235,7 @@ function visualizeData(data: CallData[]) {
                 }else{
                     all_categories[index].Count += d[1];
                 }
-                
+
             }else{ // if not a subcategory, then just add to categories
                 categoryData.Category = replaceAll(categoryData.Category,'"','');
                 all_categories.push(categoryData);
@@ -271,13 +254,15 @@ function visualizeData(data: CallData[]) {
     all_categories.sort((a, b) => b.Count - a.Count); // TODO: had original plans to make dynamic sorting buttons but was hard to manage in ts
     const CategoryBarChart = new HorizontalBarChart(
         all_categories,
-        // the mapper tells the chart what data from the source `data` you actually want to plot 
+        // the mapper tells the chart what data from the source `data` you actually want to plot
         // `aggregateMapper` is a way to group the data points into bins for a bar chart
         //TODO: figure out tooltip workings
-        straightMapper( 
-            (d) => (d.Category),
-            (b, count) => ({ label: b, value: count,
-            tooltip: "Calls: " + count.toString(), // TODO: Adjust to actual value for some reason gives error when tooltip shows 
+        straightMapper(
+            (d) => d.Category,
+            (b, count) => ({
+                label: b,
+                value: count,
+                tooltip: "Calls: " + count.toString(), // TODO: Adjust to actual value for some reason gives error when tooltip shows
             }),
             "Count"
         ),
@@ -285,16 +270,16 @@ function visualizeData(data: CallData[]) {
             xAxisLabel: "Calls",
             yAxisLabel: "Call Categories",
             colorScheme: ["#66aa77"]
-        }, 
+        },
         {
-            parent: "#category-trend-container", 
+            parent: "#category-trend-container",
             className: "h-100",
             width: 250,
             height: 400,
             margin: { top: 50, left: 200, bottom: 50, right: 50 }
         }
     );
-   
+
     // DONUT CHART
     // VISION:
     /* Take averages of time between request and update for all selected points */

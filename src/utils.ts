@@ -133,7 +133,7 @@ function weekMapper<T, D>(bucketFn: (d: T) => string | undefined, mapFn: (bucket
 }
 
 // just uses straight up raw data passed to it using given keys and value as valuestr
-function straightMapper<T, D>(bucketFn: (d: T) => string | undefined, mapFn: (bucket: string, count: number) => D,valueStr: string): DataMapperFn<T, D> {
+function straightMapper<T, D>(bucketFn: (d: T) => string| undefined, mapFn: (bucket: string, count: number) => D, valueStr: keyof T): DataMapperFn<T, D> {
     return (sourceData) => {
         const dict: Record<string, number> = {};
         let unknownCount = 0;
@@ -145,9 +145,9 @@ function straightMapper<T, D>(bucketFn: (d: T) => string | undefined, mapFn: (bu
             }
             //console.log('t:',t,t[valueStr]);
             if (valueStr == undefined){
-                valueStr = key;
+                valueStr = key as keyof T;
             }
-            dict[key] = t[valueStr]; // shows error but idk how to fix
+            dict[key as string] = t[valueStr] as number; // shows error but idk how to fix
 
         }
         const data = Object.entries(dict).map(([bucket, count]) => mapFn(bucket, count));

@@ -25,7 +25,7 @@ d3.tsv('data/Cincy311_2022_final.tsv')
     console.log(`Data loading complete: ${rawData.length} records.`);
     // const data = rawData.slice(0, 10000).map(parseRecord);
     const data = rawData.map(parseRecord)
-        .filter((d, i) => { var _a; return i % 2 === 0 && ((_a = d.REQUESTED_DATE) === null || _a === void 0 ? void 0 : _a.getFullYear()) === 2022; });
+        .filter((d, i) => { var _a; return i % 4 === 0 && ((_a = d.REQUESTED_DATE) === null || _a === void 0 ? void 0 : _a.getFullYear()) === 2022; });
     console.log(`Down to ${data.length} filtered records.`);
     console.log("Example:", data[0]);
     return visualizeData(data);
@@ -130,37 +130,20 @@ function visualizeData(data) {
         timelineHist.setDataMapper(currentData, binDateDayMapper((d) => d.REQUESTED_DATE, { bins: "weeks" }));
     });
     console.log("Timeline complete.");
-
     // B Goal Charts
     // Day of Week popularity bar chart
-    //TODO: Put manual sorting order, chart is sorted alphabetically
-    function sortCount(a, b) {
-        const days = {
-            "Sunday": 1,
-            "Monday": 2,
-            "Tuesday": 3,
-            "Wednesday": 4,
-            "Thursday": 5,
-            "Friday": 6,
-            "Saturday": 7
-        };
-        //console.log(days["Sunday"],days[a]) //1
-        //console.log(a,b)
-        return days[a] < days[b] ? -1 : (days[a] > days[b] ? 1 : 0); // I know it is screaming errors but it works for now
-    }
     const categories = []; // list of grouped categories to prevent massive overfilling
     const dowBarChart = new BarChart(data, 
-    // the mapper tells the chart what data from the source `data` you actually want to plot 
+    // the mapper tells the chart what data from the source `data` you actually want to plot
     // `aggregateMapper` is a way to group the data points into bins for a bar chart
     aggregateMapper(//TODO: Need to sort by weekday as well. originally returns week day as number
-    (d) => ((d.REQUESTED_DATE || new Date()).toLocaleString('en-us', { weekday: 'long' })), // or whatever you want to group it by
+    (d) => ((d.REQUESTED_DATE || new Date()).toLocaleString('en-us', { weekday: 'short' })), // or whatever you want to group it by
     (b, count) => ({ label: b, value: count,
         tooltip: "Calls: " + count.toString(),
         color: "#66aa77" })), {
         xAxisLabel: "Day",
         yAxisLabel: "Calls",
-        labelOrder: ["Sunday", "Monday", "Tueday", "Wednesday", "Thursday", "Friday"],
-        labelSort: sortCount
+        labelOrder: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
     }, {
         parent: "#dow-trend-container",
         className: "h-100",
@@ -170,13 +153,13 @@ function visualizeData(data) {
     });
     const myCategories = d3.rollups(data, (group) => group.length, // grab count of group
     (label) => label.SERVICE_NAME);
-    // filter the wierd ones with (<=25) 
+    // filter the wierd ones with (<=25)
     let all_categories;
     let categoryNames;
     all_categories = [];
     categoryNames = [];
-    const countCutoff = 25;
-    const subCategories = ["Building", "Tree", "Rats", "Weeds", "Trash", "Sign", "Sewage"];
+    const countCutoff = 50;
+    const subCategories = ["Building", "Tree", "Rats", "Weeds", "Trash", "Trash cart", "Sign", "Sewage", "Vehicle", "Tall grass/weeds", "Yard Waste", "Recycling"];
     myCategories.forEach(d => {
         let categoryData = { Category: d[0], Count: d[1] };
         const count = d[1];
@@ -214,11 +197,13 @@ function visualizeData(data) {
     // Sort data from large to small
     all_categories.sort((a, b) => b.Count - a.Count); // TODO: had original plans to make dynamic sorting buttons but was hard to manage in ts
     const CategoryBarChart = new HorizontalBarChart(all_categories, 
-    // the mapper tells the chart what data from the source `data` you actually want to plot 
+    // the mapper tells the chart what data from the source `data` you actually want to plot
     // `aggregateMapper` is a way to group the data points into bins for a bar chart
     //TODO: figure out tooltip workings
-    straightMapper((d) => (d.Category), (b, count) => ({ label: b, value: count,
-        tooltip: "Calls: " + count.toString(), // TODO: Adjust to actual value for some reason gives error when tooltip shows 
+    straightMapper((d) => d.Category, (b, count) => ({
+        label: b,
+        value: count,
+        tooltip: "Calls: " + count.toString(), // TODO: Adjust to actual value for some reason gives error when tooltip shows
     }), "Count"), {
         xAxisLabel: "Calls",
         yAxisLabel: "Call Categories",
@@ -236,7 +221,6 @@ function visualizeData(data) {
     // possibly clock shaped? or maybe a bar/timeline structure
     // selected data = ???
     //NOTICE: Moved entire chart over to pieChartTest.js and timePie.html
-
     // Stacked Bar Chart
     const stackData = [
         { 'xValue': "Jan", 'yValue': 0, 'zValue': 0, 'aValue': 0 },
@@ -275,7 +259,6 @@ function visualizeData(data) {
         height: 150,
         margin: { left: 70, top: 50, right: 50, bottom: 70 }
     });
-
     d3.select("#loader").remove();
 }
 const MONTH_NAMES = [
